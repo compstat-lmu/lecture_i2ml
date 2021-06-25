@@ -130,21 +130,10 @@
 
 \setbeamertemplate{frametitle}{\expandafter\uppercase\expandafter\insertframetitle}
 
-
-
 \begin{document}
-
-
 
 % This file loads R packages, configures knitr options and sets preamble.Rnw as parent file
 % IF YOU MODIFY THIS, PLZ ALSO MODIFY setup.Rmd ACCORDINGLY...
-
-
-
-
-
-
-
 
 % Defines macros and environments
 \input{../../latex-math/basic-math.tex}
@@ -155,102 +144,166 @@
 \lecturechapter{Evaluation: Measures for Regression}
 \lecture{Introduction to Machine Learning}
 
-
-
-
+% ------------------------------------------------------------------------------
 
 \begin{vbframe}{Mean Squared Error}
 
-% The \textbf{Mean Squared Error} compares the mean of the squared distances between the target variable $y$ and the predicted target $\yh$.
+The \textbf{mean squared error (MSE)} computes the mean of squared distances 
+between the target variable $y$ and the predicted target $\yh$.
 
-\begin{center}
-$
-MSE = \meanin (\yi - \yih)^2 \in [0;\infty)
-$
-\hspace{4em} $\rightarrow$ L2 loss.
-\end{center}
+$$
+MSE = \meanin (\yi - \yih)^2 \in [0;\infty) \qquad \rightarrow L2 \text{ loss}.
+$$
 
-\lz
-
-Single observations with a large prediction error heavily influence the \textbf{MSE}, as they enter quadratically.
-
-\begin{knitrout}\scriptsize
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
-
-{\centering \includegraphics[width=0.8\textwidth]{figure/plot_quad_loss} 
-
-}
-
-
-
+\begin{minipage}[c]{0.33\textwidth}
+  \raggedright
+  \small
+  Outliers with large prediction error heavily influence the MSE, as they 
+  enter quadratically.
+\end{minipage}%
+\begin{minipage}[c]{0.67\textwidth}
+  \begin{knitrout}\scriptsize
+  \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
+  {\includegraphics[width=\textwidth]{figure/plot_quad_loss}}
 \end{knitrout}
+\end{minipage}
 
-Similar measures: sum of squared errors (SSE), root mean squared error (RMSE, brings measurement back to the original scale of the outcome).
+% \lz
+
+\small
+Similar measures:
+
+\begin{itemize}
+  \small
+  \item Sum of squared errors (SSE)
+  \item Root mean squared error (RMSE) $\rightarrow$ original scale
+\end{itemize}
 
 \end{vbframe}
+
+% ------------------------------------------------------------------------------
 
 \begin{vbframe}{Mean Absolute Error}
 
-% A more robust (but not neccessarily better) way to compute a performance measure is the \textbf{Mean Absolute Error}:
-\begin{center}
-$
-MAE = \meanin |\yi - \yih| \in [0;\infty)
-$
-\hspace{4em} $\rightarrow$ L1 loss.
-\end{center}
+A more robust (but not necessarily better) alternative is the 
+\textbf{mean absolute error (MAE)}:
 
-\lz
-Less influenced by large errors and maybe more intuitive than the MSE.
+$$ 
+MAE = \meanin \rvert \yi - \yih \rvert \in [0;\infty) \qquad \rightarrow L1 
+\text{ loss}.
+$$
 
-\begin{knitrout}\scriptsize
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
-
-{\centering \includegraphics[width=0.8\textwidth]{figure/plot_abs_loss} 
-
-}
-
-
-
+\begin{minipage}[c]{0.33\textwidth}
+  \raggedright
+  \small
+  The MAE is less strongly impacted by large errors and maybe more 
+  intuitive than the MSE.
+\end{minipage}%
+\begin{minipage}[c]{0.67\textwidth}
+  \begin{knitrout}\scriptsize
+  \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
+  {\includegraphics[width=\textwidth]{figure/plot_abs_loss}}
 \end{knitrout}
+\end{minipage}
 
-Similar measures: median absolute error (for even more robustness).
+\small
+Similar measures:
+
+\begin{itemize}
+  \small
+  \item Median absolute error (for even more robustness)
+\end{itemize}
 
 \end{vbframe}
 
-\begin{vbframe}{$R^2$}
+% ------------------------------------------------------------------------------
 
-Well-known measure from statistics.
+\begin{vbframe}{$R^2$}
+\begin{small}
+Another well known measure from statistics is $R^2$:
 
 \[
-R^2 = 1 - \frac{\sumin (\yi - \yih)^2}{\sumin (\yi - \bar{y})^2} = 1 - \frac{SSE_{LinMod}}{SSE_{Intercept}}
+R^2 = 1 - \frac{\sumin (\yi - \yih)^2}{\sumin (\yi - \bar{y})^2} = 1 - \frac{SSE_{LinMod}}{SSE_{Intercept}}.
 \]
 
 \begin{itemize}
-\item Usually introduced as \textit{fraction of variance explained} by the model
-\item Simpler: compares SSE of constant model (baseline) with complex model (LM)
-\item $R^2=1$: all residuals are 0, we predict perfectly, \\
-$R^2=0$: we predict as badly as the constant model
-\item If measured on the training data, $R^2 \in [0;1]$ (LM must be at least as good as the constant)
-\item On other data $R^2$ can even be negative as there is no guarantee that the LM generalizes better than a constant (overfitting)
+  \item Usually introduced as \textbf{fraction of variance explained} by the 
+  model.
+  \item Simpler explanation: it compares the SSE of a constant model (baseline) 
+  to that of a more complex model (LM) on some data, usually the same as used 
+  for model fitting.
+  \item $R^2=1$: all residuals are 0, we predict perfectly, \\
+  $R^2=0$: we predict as badly as the constant model.
+  \item If measured on the training data, $R^2 \in [0;1]$, as the LM must be at 
+  least as good as the constant, and both SSEs are non-negative.
+  \item On other data $R^2$ can even be negative as there is no guarantee that 
+  the LM generalizes better than a constant (overfitting).
 \end{itemize}
+\end{small}
 \end{vbframe}
+
+% ------------------------------------------------------------------------------
 
 \begin{vbframe}{Generalized $R^2$ for ML}
 A simple generalization of $R^2$ for ML seems to be:
 
 \[
-1 - \frac{Loss_{ComplexModel}}{Loss_{SimplerModel}}
+1 - \frac{Loss_{ComplexModel}}{Loss_{SimplerModel}}.
 \]
 
 \begin{itemize}
-% \item This introduces a general measure of comparison between a simpler baseline, and a more complex model considered as an alternative
-\item Works for arbitrary measures (not only SSE), for arbitrary models, on any data set of interest
-\item E.g. model vs constant, LM vs non-linear model, tree vs forest, model without some features vs model with them included
-% \item In ML we would rather use that metric on a holdout-test set, there is no reason not to do that
-\item Fairly unknown; our terminology (generalized $R^2$) is non-standard
+   \item This introduces a general measure of comparison between a simpler 
+   baseline and a more complex model considered as an alternative.
+  \item Works for arbitrary measures (not only SSE), for arbitrary models, on 
+  any data set of interest.
+  \item E.g., feature model vs constant, LM vs non-linear model, tree vs forest, 
+  model with fewer features vs model with more, ...
+  \item In ML we would rather evaluate that metric on a hold-out test set -- 
+  there is no reason not to do that.
+  \item Fairly unknown; our terminology (generalized $R^2$) is non-standard.
 \end{itemize}
+
 \end{vbframe}
 
+% ------------------------------------------------------------------------------
+
+\begin{vbframe}{ml vs classical statistics}
+
+\small
+
+\begin{itemize}
+  \item In classical statistics, besides MSE, RMSE and in-sample $R^2$, other 
+  metrics are used to evaluate and select regression models. 
+  \item They often focus on goodness-of-fit, as measured by (log-)likelihood, 
+  rather than predictive accuracy -- for example, information criteria:
+  % \item Frequently used metrics are so-called information criteria (lower values 
+  % indicating better models): 
+  \begin{itemize}
+    \small
+    \item \textbf{Akaike’s information criterion (AIC)} balances model fit and
+    complexity, penalizing the number of parameters, $p$: 
+    $$ AIC = -2 \cdot \llt + 2 \cdot p.$$
+    
+    %\item \textbf{AICc} is a corrected version for AIC for small sample sizes.
+    
+    \item \textbf{Bayesian information criterion (BIC)} is another variant of 
+    the AIC with a stronger penalty for more complex models: 
+    $$ BIC = -2 \cdot \llt + \log(p).$$
+  \end{itemize}
+    
+  % \item By adding the number of parameters $p$ to the evaluation metric, more 
+  % complex models are penalized. 
+    
+  \item As both AIC and BIC are based upon a ground-truth distribution, they 
+  cannot be used to compare performances across different data sets.
+  \item NB: using the same data for training and evaluation / model selection 
+  introduces optimistic bias $\rightarrow$ post-selection inference.
+    
+ \end{itemize}
+
+\end{vbframe}
+
+% ------------------------------------------------------------------------------
 
 \endlecture
 \end{document}
